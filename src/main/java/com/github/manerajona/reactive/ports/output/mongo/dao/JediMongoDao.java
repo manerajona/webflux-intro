@@ -6,7 +6,7 @@ import com.github.manerajona.reactive.ports.output.mongo.document.JediMongo;
 import com.github.manerajona.reactive.ports.output.mongo.mapper.JediMongoMapper;
 import com.github.manerajona.reactive.ports.output.mongo.repository.JediMongoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
 import java.util.Optional;
 import java.util.UUID;
 
-@Primary
+@Profile("!h2")
 @Component
 @RequiredArgsConstructor
 public class JediMongoDao implements JediRepository {
@@ -43,9 +43,8 @@ public class JediMongoDao implements JediRepository {
         return repository.findById(id)
                 .defaultIfEmpty(new JediMongo())
                 .map(jediMongo -> {
-                    Optional.ofNullable(jedi.gender()).ifPresent(jediMongo::setGender);;
-                    Optional.ofNullable(jedi.planet()).ifPresent(jediMongo::setPlanet);;
-                    Optional.ofNullable(jedi.birthday()).ifPresent(jediMongo::setBirthday);;
+                    Optional.ofNullable(jedi.gender()).ifPresent(jediMongo::setGender);
+                    Optional.ofNullable(jedi.planet()).ifPresent(jediMongo::setPlanet);
                     return jediMongo;
                 }).flatMap(updated -> Optional.ofNullable(updated.getId())
                         .map(i -> repository.save(updated))

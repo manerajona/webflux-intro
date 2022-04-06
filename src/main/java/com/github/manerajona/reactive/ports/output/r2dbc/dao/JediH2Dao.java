@@ -1,54 +1,65 @@
 package com.github.manerajona.reactive.ports.output.r2dbc.dao;
 
+import com.github.manerajona.reactive.domain.model.Jedi;
+import com.github.manerajona.reactive.domain.repository.JediRepository;
+import com.github.manerajona.reactive.ports.output.r2dbc.entity.JediH2;
+import com.github.manerajona.reactive.ports.output.r2dbc.mapper.JediH2Mapper;
+import com.github.manerajona.reactive.ports.output.r2dbc.repository.JediR2dbcRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-//@Primary
-//@Component
+import java.util.Optional;
+import java.util.UUID;
+
+@Profile("h2")
+@Component
 @RequiredArgsConstructor
-public class JediH2Dao //implements jediRepository
-{
+public class JediH2Dao implements JediRepository {
 
-    /*
     private final JediR2dbcRepository repository;
-    private final JediR2dbcMapper mapper;
+    private final JediH2Mapper mapper;
 
     @Override
     @Transactional
-    public Mono<Long> create(Jedi jedi) {
-        JediR2dbc jpa = mapper.jediToJediR2dbc(jedi);
-        return repository.save(jpa).map(JediR2dbc::getId);
+    public Mono<UUID> create(Jedi jedi) {
+        JediH2 jediH2 = mapper.jediToJediH2(jedi);
+        return repository.save(jediH2).map(JediH2::getId);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<Jedi> findOne(Long id) {
-        return repository.findById(id).map(mapper::jediR2dbcToJedi);
+    public Mono<Jedi> findOne(UUID id) {
+        return repository.findById(id).map(mapper::jediH2ToJedi);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Mono<JediList> findAllByPageable(Pageable pageable) {
-        // todo paginated list
-        return Mono.empty();
+    public Flux<Jedi> findAll() {
+        return repository.findAll().map(mapper::jediH2ToJedi);
     }
 
     @Override
     @Transactional
-    public Mono<Jedi> update(Long id, Jedi jedi) {
+    public Mono<Jedi> update(UUID id, Jedi jedi) {
         return repository.findById(id)
-                .defaultIfEmpty(new JediR2dbc())
-                .map(jediR2dbc -> {
-                    jediR2dbc.setBirthday(jedi.getBirthday());
-                    return jediR2dbc;
+                .defaultIfEmpty(new JediH2())
+                .map(jediH2 -> {
+                    Optional.ofNullable(jedi.gender()).ifPresent(jediH2::setGender);
+                    Optional.ofNullable(jedi.planet()).ifPresent(jediH2::setPlanet);
+                    return jediH2;
                 }).flatMap(updated -> Optional.ofNullable(updated.getId())
                         .map(i -> repository.save(updated))
                         .orElse(Mono.just(updated)))
-                .map(mapper::jediR2dbcToJedi);
+                .map(mapper::jediH2ToJedi);
     }
 
     @Override
     @Transactional
-    public Mono<Void> delete(Long id) {
+    public Mono<Void> delete(UUID id) {
         return repository.deleteById(id);
-    }*/
+    }
 }

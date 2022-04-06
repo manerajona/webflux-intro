@@ -12,13 +12,13 @@ import reactor.netty.transport.logging.AdvancedByteBufFormat;
 public class WebClientConfig {
 
     @Bean
-    public WebClient webClient(){
+    WebClient webClient(){
         return WebClient.builder()
                 .clientConnector(getConnector())
                 .build();
     }
 
-    private ReactorClientHttpConnector getConnector() {
+    ReactorClientHttpConnector getConnector() {
         return new ReactorClientHttpConnector(HttpClient.create()
                 .wiretap("reactor.netty.client.HttpClient", LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL));
     }

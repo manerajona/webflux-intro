@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.data.relational.core.mapping.Table;
 
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -15,6 +14,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
+@Table("jedi")
 public class JediH2 {
 
     @Id
@@ -25,9 +25,6 @@ public class JediH2 {
     private String planet;
 
     private String name;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate birthday;
 
     @Override
     public boolean equals(Object o) {

@@ -6,7 +6,6 @@ import lombok.Setter;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -21,7 +20,6 @@ public class JediMongo {
     private String name;
     private String gender;
     private String planet;
-    private LocalDate birthday;
 
     @Override
     public boolean equals(Object o) {
