@@ -19,7 +19,9 @@ public class JediMongo {
     private UUID id;
     private String name;
     private String gender;
+    private String birthYear;
     private String planet;
+    private String url;
 
     @Override
     public boolean equals(Object o) {

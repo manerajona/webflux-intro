@@ -1,7 +1,7 @@
 package com.github.manerajona.reactive.ports.input.rs.router;
 
-import com.github.manerajona.reactive.domain.model.Planet;
 import com.github.manerajona.reactive.ports.input.rs.handler.PlanetHandlerV1;
+import com.github.manerajona.reactive.ports.input.rs.response.PlanetResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -25,10 +25,10 @@ public class PlanetRouter {
     @Bean
     @RouterOperations({
             @RouterOperation(path = PlanetHandlerV1.PLANET_URI, method = RequestMethod.GET, operation = @Operation(operationId = "getPlanets",
-                    responses = @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Planet.class))))),
+                    responses = @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PlanetResponse.class))))),
             @RouterOperation(path = PlanetHandlerV1.PLANET_ID_URI, method = RequestMethod.GET, operation = @Operation(operationId = "getPlanet",
                     parameters = @Parameter(name = "id", in = ParameterIn.PATH),
-                    responses = @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = Planet.class)))))})
+                    responses = @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = PlanetResponse.class)))))})
     public RouterFunction<ServerResponse> planetRoutes(PlanetHandlerV1 handler) {
         return route()
                 .GET(PlanetHandlerV1.PLANET_URI, accept(APPLICATION_JSON), handler::getPlanets)

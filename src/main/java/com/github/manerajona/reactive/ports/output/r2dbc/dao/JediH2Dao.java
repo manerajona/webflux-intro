@@ -49,7 +49,9 @@ public class JediH2Dao implements JediRepository {
                 .defaultIfEmpty(new JediH2())
                 .map(jediH2 -> {
                     Optional.ofNullable(jedi.gender()).ifPresent(jediH2::setGender);
+                    Optional.ofNullable(jedi.birthYear()).ifPresent(jediH2::setBirthYear);
                     Optional.ofNullable(jedi.planet()).ifPresent(jediH2::setPlanet);
+                    Optional.ofNullable(jedi.url()).ifPresent(jediH2::setUrl);
                     return jediH2;
                 }).flatMap(updated -> Optional.ofNullable(updated.getId())
                         .map(i -> repository.save(updated))

@@ -6,5 +6,7 @@ public record JediResponse(
         UUID id,
         String name,
         String gender,
-        String planet
+        String birthYear,
+        String planet,
+        String url
 ) { }

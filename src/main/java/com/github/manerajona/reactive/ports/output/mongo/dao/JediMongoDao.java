@@ -44,7 +44,9 @@ public class JediMongoDao implements JediRepository {
                 .defaultIfEmpty(new JediMongo())
                 .map(jediMongo -> {
                     Optional.ofNullable(jedi.gender()).ifPresent(jediMongo::setGender);
+                    Optional.ofNullable(jedi.birthYear()).ifPresent(jediMongo::setBirthYear);
                     Optional.ofNullable(jedi.planet()).ifPresent(jediMongo::setPlanet);
+                    Optional.ofNullable(jedi.url()).ifPresent(jediMongo::setUrl);
                     return jediMongo;
                 }).flatMap(updated -> Optional.ofNullable(updated.getId())
                         .map(i -> repository.save(updated))
