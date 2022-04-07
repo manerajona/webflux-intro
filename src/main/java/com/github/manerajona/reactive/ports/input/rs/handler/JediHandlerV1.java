@@ -62,7 +62,8 @@ public class JediHandlerV1 {
     }
 
     public Mono<ServerResponse> getJedis(ServerRequest ignored) {
-        return ServerResponse.ok().body(service.getList(), Jedi.class);
+        return ServerResponse.ok().body(service.getList(), Jedi.class)
+                .doOnError(error -> log.error(error.getMessage(), error));
     }
 
     public Mono<ServerResponse> updateJedi(ServerRequest request) {

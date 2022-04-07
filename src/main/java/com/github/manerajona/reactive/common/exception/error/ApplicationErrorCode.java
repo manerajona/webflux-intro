@@ -7,9 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ApplicationErrorCode {
     INVALID_FIELD_VALUE("The provided field is not valid."),
-    NOT_FOUND("The requested resource was not found."),
     RESOURCE_NOT_FOUND("The requested resource was not found."),
-    BAD_REQUEST("Wrong value in the Expiration Date parameter."),
+    BAD_REQUEST("The server can’t return a response due to an error on the client’s end."),
     ILLEGAL_ARGUMENT("Has been passed an illegal or inappropriate argument."),
     HTTP_CLIENT_ERROR("The request failed because a 4xx error was received."),
     BAD_CREDENTIALS("The server can’t return a response due to invalid credentials."),

@@ -1,6 +1,7 @@
 package com.github.manerajona.reactive.domain.model;
 
 public record Planet(
+        String id,
         String name,
         Long population,
         String climate,
@@ -9,5 +10,6 @@ public record Planet(
         Integer diameter,
         Integer surfaceWater,
         Integer orbitalPeriod,
-        Integer rotationPeriod
+        Integer rotationPeriod,
+        String url
 ) { }
