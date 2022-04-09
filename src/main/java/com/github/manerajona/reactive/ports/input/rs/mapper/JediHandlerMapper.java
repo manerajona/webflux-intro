@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
-public interface JediControllerMapper {
+public interface JediHandlerMapper {
     Jedi createJediRequestToJedi(CreateJediRequest request);
     Jedi updateJediRequestToJedi(UpdateJediRequest request);
 }

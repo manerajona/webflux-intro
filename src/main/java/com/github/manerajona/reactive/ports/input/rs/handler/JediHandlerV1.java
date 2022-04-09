@@ -6,7 +6,7 @@ import com.github.manerajona.reactive.common.exception.error.ErrorDetails;
 import com.github.manerajona.reactive.common.exception.error.ErrorLocation;
 import com.github.manerajona.reactive.domain.model.Jedi;
 import com.github.manerajona.reactive.domain.usecase.JediService;
-import com.github.manerajona.reactive.ports.input.rs.mapper.JediControllerMapper;
+import com.github.manerajona.reactive.ports.input.rs.mapper.JediHandlerMapper;
 import com.github.manerajona.reactive.ports.input.rs.request.CreateJediRequest;
 import com.github.manerajona.reactive.ports.input.rs.request.UpdateJediRequest;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class JediHandlerV1 {
     public static final String JEDIS_ID_URI = JEDIS_URI + "/{id}";
 
     private final JediService service;
-    private final JediControllerMapper mapper;
+    private final JediHandlerMapper mapper;
     private final Validator validator;
 
     public Mono<ServerResponse> createJedis(ServerRequest request) {
@@ -84,6 +84,7 @@ public class JediHandlerV1 {
         UUID id = UUID.fromString(request.pathVariable("id").trim());
         return service.deleteById(id)
                 .flatMap(voidMono -> ServerResponse.noContent().build())
+                .switchIfEmpty(ServerResponse.noContent().build())
                 .doOnError(error -> log.error(error.getMessage(), error));
     }
 
