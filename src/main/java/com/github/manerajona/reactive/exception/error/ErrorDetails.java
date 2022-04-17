@@ -1,12 +1,12 @@
-package com.github.manerajona.reactive.common.exception.error;
+package com.github.manerajona.reactive.exception.error;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Value;
 
 import javax.validation.constraints.NotNull;
 
-@Data
+@Value
 @Builder
 @JsonPropertyOrder({"code", "detail", "field", "value", "location"})
 public class ErrorDetails {
@@ -14,29 +14,27 @@ public class ErrorDetails {
     /**
      * The unique and fine-grained application-level error code.
      */
-    @NotNull
-    private ApplicationErrorCode code;
+    @NotNull ApplicationErrorCode code;
 
     /**
      * The human-readable description for an issue. Provide non-standard more granular error message.
      */
-    @NotNull
-    private String detail;
+    @NotNull String detail;
 
     /**
      * The field that caused the error. If the field is in the body, set this value to the JSON pointer to that field.
      * Example: "field": {"$ref": "#/body-field"}
      */
-    private String field;
+    String field;
 
     /**
      * The value of the field that caused the error.
      */
-    private Object value;
+    Object value;
 
     /**
      * The location of the field that caused the error. Value is `BODY`, `PATH`, `QUERY` or `HEADER`.
      */
-    private ErrorLocation location;
+    ErrorLocation location;
 
 }

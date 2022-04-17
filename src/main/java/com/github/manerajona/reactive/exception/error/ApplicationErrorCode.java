@@ -1,4 +1,4 @@
-package com.github.manerajona.reactive.common.exception.error;
+package com.github.manerajona.reactive.exception.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,13 +1,14 @@
-package com.github.manerajona.reactive.common.exception.handler;
+package com.github.manerajona.reactive.exception.handler;
 
-import com.github.manerajona.reactive.common.exception.ErrorDetailsException;
-import com.github.manerajona.reactive.common.exception.error.ApplicationErrorCode;
-import com.github.manerajona.reactive.common.exception.error.ErrorDetails;
-import com.github.manerajona.reactive.common.util.JsonUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.manerajona.reactive.exception.ErrorDetailsException;
+import com.github.manerajona.reactive.exception.error.ApplicationErrorCode;
+import com.github.manerajona.reactive.exception.error.ErrorDetails;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.boot.web.reactive.error.ErrorWebExceptionHandler;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,19 +16,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
 @Order(-2)
+@RequiredArgsConstructor
 public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
-    private static final byte[] INTERNAL_ERROR_JSON = """
-            [{
-              "code": "INTERNAL_ERROR",
-              "detail": "There was an error on the server and the request could not be completed."
-            }]""".getBytes(StandardCharsets.UTF_8);
+    private final ObjectMapper mapper;
 
     private static final List<ErrorDetails> INTERNAL_ERROR_DETAILS = List.of(ErrorDetails.builder()
             .code(ApplicationErrorCode.INTERNAL_ERROR)
@@ -39,7 +35,7 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
         Pair<HttpStatus, List<ErrorDetails>> pair;
         if (throwable instanceof ErrorDetailsException ex) {
-            pair = Pair.of(HttpStatus.NOT_FOUND, ex.getErrors());
+            pair = Pair.of(ex.getStatus(), ex.errors());
         } else {
             pair = Pair.of(HttpStatus.INTERNAL_SERVER_ERROR, INTERNAL_ERROR_DETAILS);
         }
@@ -48,19 +44,13 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
         return serverWebExchange.getResponse().writeWith(getBody(serverWebExchange, pair.getSecond()));
     }
 
+    @SneakyThrows
     private Mono<DataBuffer> getBody(ServerWebExchange serverWebExchange, List<ErrorDetails> errors) {
-        final DataBufferFactory bufferFactory = serverWebExchange.getResponse().bufferFactory();
-        return Mono.just(getDataBuffer(bufferFactory, errors));
-    }
+        DataBuffer dataBuffer = serverWebExchange.getResponse()
+                .bufferFactory()
+                .wrap(mapper.writeValueAsBytes(errors));
 
-    private DataBuffer getDataBuffer(DataBufferFactory bufferFactory, List<ErrorDetails> errors) {
-        DataBuffer dataBuffer;
-        try {
-            dataBuffer = bufferFactory.wrap(JsonUtils.objectToBytes(errors));
-        } catch (IOException e) {
-            dataBuffer = bufferFactory.wrap(INTERNAL_ERROR_JSON);
-        }
-        return dataBuffer;
+        return Mono.just(dataBuffer);
     }
     
 }

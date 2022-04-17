@@ -34,8 +34,9 @@ class JediRouterIntegrationTest {
     @BeforeEach
     void setUp() {
         webClient = WebClient.builder()
-                .baseUrl("http://localhost:8080")
-                .clientConnector(new ReactorClientHttpConnector(HttpClient.create().wiretap(true)))
+                .baseUrl(BASE_URL)
+                .clientConnector(new ReactorClientHttpConnector(
+                        HttpClient.create().wiretap(true)))
                 .build();
     }
 
@@ -173,6 +174,7 @@ class JediRouterIntegrationTest {
 
     /// Global
 
+    private static final String BASE_URL = "http://localhost:8080";
     private static final int TIMEOUT_MILLIS = 1000;
 
     private static final CreateJediRequest CREATE_JEDI_REQUEST = new CreateJediRequest(
@@ -183,7 +185,7 @@ class JediRouterIntegrationTest {
             "www.swapi.tech/api/people/10");
 
     private static final UpdateJediRequest UPDATE_JEDI_REQUEST = new UpdateJediRequest(
-            "female",
+            "non-binary",
             "92BBY",
             "www.swapi.tech/api/planets/28",
             "www.swapi.tech/api/people/2");

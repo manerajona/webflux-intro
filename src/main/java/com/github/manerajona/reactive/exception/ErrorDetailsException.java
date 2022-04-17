@@ -1,13 +1,12 @@
-package com.github.manerajona.reactive.common.exception;
+package com.github.manerajona.reactive.exception;
 
-import com.github.manerajona.reactive.common.exception.error.ErrorDetails;
-import lombok.Getter;
+import com.github.manerajona.reactive.exception.error.ErrorDetails;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Getter
 public class ErrorDetailsException extends ResponseStatusException {
 
     private final List<ErrorDetails> errors;
@@ -17,8 +16,7 @@ public class ErrorDetailsException extends ResponseStatusException {
         this.errors = errors;
     }
 
-    public ErrorDetailsException(HttpStatus status, ErrorDetails error) {
-        super(status);
-        this.errors = List.of(error);
+    public List<ErrorDetails> errors() {
+        return new ArrayList<>(errors);
     }
 }

@@ -8,7 +8,7 @@ public record CreateJediRequest(
         @Pattern(regexp = "[a-zA-Z\\s\\-]+", message = "The name field must contain only text without numbers")
         String name,
         @NotBlank
-        @Pattern(regexp = "[a-zA-Z\\s]+", message = "The name field must contain only text without numbers")
+        @Pattern(regexp = "[a-zA-Z\\s\\-]+", message = "The name field must contain only text without numbers")
         String gender,
         @NotBlank
         String birthYear,

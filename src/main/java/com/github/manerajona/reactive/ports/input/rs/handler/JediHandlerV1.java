@@ -1,11 +1,11 @@
 package com.github.manerajona.reactive.ports.input.rs.handler;
 
-import com.github.manerajona.reactive.common.exception.ErrorDetailsException;
-import com.github.manerajona.reactive.common.exception.error.ApplicationErrorCode;
-import com.github.manerajona.reactive.common.exception.error.ErrorDetails;
-import com.github.manerajona.reactive.common.exception.error.ErrorLocation;
 import com.github.manerajona.reactive.domain.model.Jedi;
 import com.github.manerajona.reactive.domain.usecase.JediService;
+import com.github.manerajona.reactive.exception.ErrorDetailsException;
+import com.github.manerajona.reactive.exception.error.ApplicationErrorCode;
+import com.github.manerajona.reactive.exception.error.ErrorDetails;
+import com.github.manerajona.reactive.exception.error.ErrorLocation;
 import com.github.manerajona.reactive.ports.input.rs.mapper.JediHandlerMapper;
 import com.github.manerajona.reactive.ports.input.rs.request.CreateJediRequest;
 import com.github.manerajona.reactive.ports.input.rs.request.UpdateJediRequest;

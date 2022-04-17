@@ -2,6 +2,8 @@ package com.github.manerajona.reactive.ports.input.rs.router;
 
 import com.github.manerajona.reactive.domain.model.Jedi;
 import com.github.manerajona.reactive.ports.input.rs.handler.JediHandlerV1;
+import com.github.manerajona.reactive.ports.input.rs.request.CreateJediRequest;
+import com.github.manerajona.reactive.ports.input.rs.request.UpdateJediRequest;
 import com.github.manerajona.reactive.ports.input.rs.response.JediResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +35,7 @@ class JediRouterUnitTest {
     @Test
     void jediRoutes_shouldCreateNewJedi_success() {
         final UUID id = UUID.randomUUID();
-        final Jedi jedi = new Jedi(id,
+        final CreateJediRequest createRequest = new CreateJediRequest(
                 "Obi-Wan Kenobi",
                 "male",
                 "57BBY",
@@ -49,7 +51,7 @@ class JediRouterUnitTest {
         webTestClient.post()
                 .uri(JediHandlerV1.JEDIS_URI)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(jedi))
+                .body(BodyInserters.fromValue(createRequest))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectHeader().location(location.toString());
@@ -57,7 +59,6 @@ class JediRouterUnitTest {
 
     @Test
     void jediRoutes_shouldGetExistingJedi_success() {
-
         final UUID id = UUID.randomUUID();
         final Jedi jedi = new Jedi(id,
                 "Luke Skywalker",
@@ -69,7 +70,7 @@ class JediRouterUnitTest {
         given(handler.getJedi(any())).willReturn(ServerResponse.ok().bodyValue(jedi));
 
         webTestClient.get()
-                .uri(JediHandlerV1.JEDIS_ID_URI.replace("{id}", id.toString()))
+                .uri(JediHandlerV1.JEDIS_ID_URI, id)
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(JediResponse.class)
@@ -84,7 +85,6 @@ class JediRouterUnitTest {
     @Test
     void getJedis_shouldGetListOfJedis_success() {
         final UUID id = UUID.randomUUID();
-
         final Jedi jedi = new Jedi(id,
                 "Luke Skywalker",
                 "male",
@@ -107,19 +107,18 @@ class JediRouterUnitTest {
     @Test
     void updateJedi_shouldUpdateExistingJedi_success() {
         final UUID id = UUID.randomUUID();
-        final Jedi jedi = new Jedi(id,
-                "Obi-Wan Kenobi",
-                "male",
-                "57BBY",
-                "www.swapi.tech/api/planets/20",
-                "www.swapi.tech/api/people/10");
+        final UpdateJediRequest updateRequest = new UpdateJediRequest(
+                "non-binary",
+                "92BBY",
+                "www.swapi.tech/api/planets/28",
+                "www.swapi.tech/api/people/2");
 
         given(handler.updateJedi(any())).willReturn(ServerResponse.noContent().build());
 
         webTestClient.patch()
-                .uri(JediHandlerV1.JEDIS_ID_URI.replace("{id}", id.toString()))
+                .uri(JediHandlerV1.JEDIS_ID_URI, id)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromValue(jedi))
+                .body(BodyInserters.fromValue(updateRequest))
                 .exchange()
                 .expectStatus().isNoContent();
     }
@@ -131,7 +130,7 @@ class JediRouterUnitTest {
         given(handler.deleteJedi(any())).willReturn(ServerResponse.noContent().build());
 
         webTestClient.delete()
-                .uri(JediHandlerV1.JEDIS_ID_URI.replace("{id}", id.toString()))
+                .uri(JediHandlerV1.JEDIS_ID_URI, id)
                 .exchange()
                 .expectStatus().isNoContent();
     }
