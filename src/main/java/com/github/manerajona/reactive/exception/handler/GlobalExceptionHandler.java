@@ -2,7 +2,7 @@ package com.github.manerajona.reactive.exception.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.manerajona.reactive.exception.ErrorDetailsException;
-import com.github.manerajona.reactive.exception.error.ApplicationErrorCode;
+import com.github.manerajona.reactive.exception.error.ErrorCode;
 import com.github.manerajona.reactive.exception.error.ErrorDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -25,10 +25,11 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
     private final ObjectMapper mapper;
 
-    private static final List<ErrorDetails> INTERNAL_ERROR_DETAILS = List.of(ErrorDetails.builder()
-            .code(ApplicationErrorCode.INTERNAL_ERROR)
-            .detail(ApplicationErrorCode.INTERNAL_ERROR.getDefaultMessage())
-            .build());
+    private static final List<ErrorDetails> INTERNAL_ERROR_DETAILS =
+            List.of(ErrorDetails.builder()
+                    .code(ErrorCode.INTERNAL_ERROR)
+                    .detail(ErrorCode.INTERNAL_ERROR.getDefaultMessage())
+                    .build());
 
     @Override
     public Mono<Void> handle(ServerWebExchange serverWebExchange, Throwable throwable) {
@@ -52,5 +53,5 @@ public class GlobalExceptionHandler implements ErrorWebExceptionHandler {
 
         return Mono.just(dataBuffer);
     }
-    
+
 }

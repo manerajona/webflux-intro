@@ -3,7 +3,7 @@ package com.github.manerajona.reactive.ports.output.gateway.cli;
 import com.github.manerajona.reactive.domain.model.Planet;
 import com.github.manerajona.reactive.domain.repository.PlanetRepository;
 import com.github.manerajona.reactive.exception.ErrorDetailsException;
-import com.github.manerajona.reactive.exception.error.ApplicationErrorCode;
+import com.github.manerajona.reactive.exception.error.ErrorCode;
 import com.github.manerajona.reactive.exception.error.ErrorDetails;
 import com.github.manerajona.reactive.ports.output.gateway.dto.PlanetDto;
 import com.github.manerajona.reactive.ports.output.gateway.dto.SwapiListResponse;
@@ -39,14 +39,14 @@ public class PlanetClient implements PlanetRepository {
                 .onStatus(HttpStatus::is4xxClientError,
                         error -> Mono.error(new ErrorDetailsException(error.statusCode(), List.of(
                                 ErrorDetails.builder()
-                                        .code(ApplicationErrorCode.HTTP_CLIENT_ERROR)
-                                        .detail(ApplicationErrorCode.HTTP_CLIENT_ERROR.getDefaultMessage())
+                                        .code(ErrorCode.HTTP_CLIENT_ERROR)
+                                        .detail(ErrorCode.HTTP_CLIENT_ERROR.getDefaultMessage())
                                         .build()))))
                 .onStatus(HttpStatus::is5xxServerError,
                         error -> Mono.error(new ErrorDetailsException(error.statusCode(), List.of(
                                 ErrorDetails.builder()
-                                        .code(ApplicationErrorCode.SERVICE_UNAVAILABLE)
-                                        .detail(ApplicationErrorCode.SERVICE_UNAVAILABLE.getDefaultMessage())
+                                        .code(ErrorCode.SERVICE_UNAVAILABLE)
+                                        .detail(ErrorCode.SERVICE_UNAVAILABLE.getDefaultMessage())
                                         .build()))))
                 .bodyToMono(SwapiSingleResponse.class)
                 .map(response -> {
@@ -54,7 +54,7 @@ public class PlanetClient implements PlanetRepository {
                     if ("unknown".equals(planetDto.getName())) {
                         throw new ErrorDetailsException(HttpStatus.NOT_FOUND, List.of(
                                 ErrorDetails.builder()
-                                        .code(ApplicationErrorCode.RESOURCE_NOT_FOUND)
+                                        .code(ErrorCode.RESOURCE_NOT_FOUND)
                                         .detail("Planet not found")
                                         .build()));
                     }
@@ -70,14 +70,14 @@ public class PlanetClient implements PlanetRepository {
                 .onStatus(HttpStatus::is4xxClientError,
                         error -> Mono.error(new ErrorDetailsException(error.statusCode(), List.of(
                                 ErrorDetails.builder()
-                                        .code(ApplicationErrorCode.HTTP_CLIENT_ERROR)
-                                        .detail(ApplicationErrorCode.HTTP_CLIENT_ERROR.getDefaultMessage())
+                                        .code(ErrorCode.HTTP_CLIENT_ERROR)
+                                        .detail(ErrorCode.HTTP_CLIENT_ERROR.getDefaultMessage())
                                         .build()))))
                 .onStatus(HttpStatus::is5xxServerError,
                         error -> Mono.error(new ErrorDetailsException(error.statusCode(), List.of(
                                 ErrorDetails.builder()
-                                        .code(ApplicationErrorCode.SERVICE_UNAVAILABLE)
-                                        .detail(ApplicationErrorCode.SERVICE_UNAVAILABLE.getDefaultMessage())
+                                        .code(ErrorCode.SERVICE_UNAVAILABLE)
+                                        .detail(ErrorCode.SERVICE_UNAVAILABLE.getDefaultMessage())
                                         .build()))))
                 .bodyToMono(SwapiListResponse.class)
                 .flatMapMany(response -> {

@@ -3,7 +3,7 @@ package com.github.manerajona.reactive.ports.input.rs.handler;
 import com.github.manerajona.reactive.domain.model.Jedi;
 import com.github.manerajona.reactive.domain.usecase.JediService;
 import com.github.manerajona.reactive.exception.ErrorDetailsException;
-import com.github.manerajona.reactive.exception.error.ApplicationErrorCode;
+import com.github.manerajona.reactive.exception.error.ErrorCode;
 import com.github.manerajona.reactive.exception.error.ErrorDetails;
 import com.github.manerajona.reactive.exception.error.ErrorLocation;
 import com.github.manerajona.reactive.ports.input.rs.mapper.JediHandlerMapper;
@@ -95,7 +95,7 @@ public class JediHandlerV1 {
         if(result.hasErrors()){
             List<ErrorDetails> errors = result.getFieldErrors().stream()
                     .map(fieldError -> ErrorDetails.builder()
-                            .code(ApplicationErrorCode.INVALID_FIELD_VALUE)
+                            .code(ErrorCode.INVALID_FIELD_VALUE)
                             .detail(fieldError.getDefaultMessage())
                             .field(fieldError.getField())
                             .value(fieldError.getRejectedValue())
